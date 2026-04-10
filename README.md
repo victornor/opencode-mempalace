@@ -12,6 +12,7 @@ Give your OpenCode sessions **permanent memory**. Your AI will remember conversa
 - **Transcript Export**: Writes markdown transcripts to `~/chats/opencode/`
 - **Local Workflow**: Runs `mempalace mine` locally with your existing MemPalace install
 - **Close-Path Saves**: Saves on interval checkpoints, compaction, and session/server disposal events
+- **Optional Skill**: Includes an OpenCode skill for guided MemPalace workflows
 
 ## Prerequisites
 
@@ -78,7 +79,30 @@ When published to npm, this will become:
 }
 ```
 
-### 4. Set Environment Variables
+### 4. Optional OpenCode Skill
+
+This repo also includes an optional OpenCode skill at:
+
+```bash
+skills/mempalace/SKILL.md
+```
+
+To install it locally:
+
+```bash
+mkdir -p ~/.opencode/skills/mempalace
+cp skills/mempalace/SKILL.md ~/.opencode/skills/mempalace/SKILL.md
+```
+
+The skill is a lightweight helper that tells OpenCode to use:
+
+```bash
+mempalace instructions <command>
+```
+
+for guided MemPalace workflows.
+
+### 5. Set Environment Variables
 
 Add to your shell profile:
 
@@ -105,7 +129,7 @@ The plugin will usually auto-detect MemPalace by trying:
 
 Set `MEMPALACE_PYTHON` only if you need to force a specific Python.
 
-### 5. How Export Works
+### 6. How Export Works
 
 The plugin reads OpenCode's SQLite database here:
 
@@ -128,7 +152,7 @@ mempalace search "why did we switch to GraphQL"
 mempalace status
 ```
 
-### 6. Optional Manual Check
+### 7. Optional Manual Check
 
 ```bash
 # Manual verification that MemPalace can ingest exported OpenCode transcripts
