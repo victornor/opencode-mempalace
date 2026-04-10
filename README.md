@@ -4,6 +4,14 @@ OpenCode plugin for [MemPalace](https://github.com/milla-jovovich/mempalace).
 
 Give your OpenCode sessions **permanent memory**. Your AI will remember conversations, decisions, and context across sessions — automatically.
 
+If you use OpenCode with an agent, you can give it this README and ask it to install or uninstall the full MemPalace setup automatically using the agent sections below.
+
+Example prompt:
+
+```text
+Install the OpenCode MemPalace plugin and optional skill from this repo: https://github.com/victornor/opencode-mempalace/blob/main/README.md
+```
+
 ## Features
 
 - **Idle Checkpoint Saves**: Counts `session.idle` events and saves every N assistant responses
@@ -20,6 +28,187 @@ Give your OpenCode sessions **permanent memory**. Your AI will remember conversa
 - [MemPalace](https://github.com/milla-jovovich/mempalace) installed
 
 ## Setup
+
+<details>
+<summary>INSTALL INSTRUCTIONS (FOR AGENTS)</summary>
+
+Use these steps when asked to fully install MemPalace for OpenCode.
+
+1. Install MemPalace globally.
+
+```bash
+pip install mempalace
+```
+
+If the machine uses a PEP 668-managed Python environment, use:
+
+```bash
+python3 -m pip install --user --break-system-packages mempalace
+```
+
+2. Ensure the MemPalace CLI is on `PATH`.
+
+If installed into `~/.local/bin`, add that directory to the shell `PATH`.
+
+3. Initialize MemPalace.
+
+```bash
+mempalace init ~/projects/myapp
+```
+
+4. Clone this plugin repository.
+
+```bash
+git clone https://github.com/victornor/opencode-mempalace.git ~/git/opencode-mempalace
+```
+
+5. Install plugin dependencies and build it.
+
+```bash
+cd ~/git/opencode-mempalace
+bun install
+bun run build
+```
+
+6. Configure OpenCode to load the plugin.
+
+Edit `~/.config/opencode/opencode.json` and ensure it contains:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["/home/<user>/git/opencode-mempalace"]
+}
+```
+
+If the file already exists, merge this into the existing config instead of overwriting unrelated settings.
+
+7. Optionally configure the MemPalace MCP server in the same `opencode.json`.
+
+```json
+{
+  "mcp": {
+    "mempalace": {
+      "type": "local",
+      "command": ["python3", "-m", "mempalace.mcp_server"],
+      "enabled": true
+    }
+  }
+}
+```
+
+8. Optionally install the OpenCode skill.
+
+```bash
+mkdir -p ~/.opencode/skills/mempalace
+cp ~/git/opencode-mempalace/skills/mempalace/SKILL.md ~/.opencode/skills/mempalace/SKILL.md
+```
+
+9. Configure environment variables in the user's shell profile.
+
+Required or recommended:
+
+```bash
+export MEMPAL_CONVOS_DIR=~/chats
+export MEMPALACE_SAVE_INTERVAL=15
+export MEMPALACE_DEBUG=1
+export OPENCODE_DB_PATH=~/.local/share/opencode/opencode.db
+```
+
+Optional override if MemPalace is not available via the default Python:
+
+```bash
+export MEMPALACE_PYTHON=/path/to/python3
+```
+
+10. Create the transcript export directory.
+
+```bash
+mkdir -p ~/chats/opencode
+```
+
+11. Reload the shell configuration or start a new shell.
+
+12. Restart OpenCode.
+
+13. Verify installation.
+
+```bash
+mempalace status
+tail -50 /tmp/opencode-mempalace.log
+```
+
+14. Verify the plugin path works by sending a few prompts in OpenCode, then check:
+
+```bash
+ls -la ~/chats/opencode
+mempalace search "some phrase from a recent conversation"
+```
+
+</details>
+
+<details>
+<summary>UNINSTALL INSTRUCTIONS (FOR AGENTS)</summary>
+
+Use these steps when asked to remove the full MemPalace OpenCode setup.
+
+1. Remove the plugin from `~/.config/opencode/opencode.json`.
+
+Delete the plugin entry pointing to `opencode-mempalace`.
+
+2. Optionally remove the MemPalace MCP server entry from `~/.config/opencode/opencode.json`.
+
+Delete the `mempalace` item from the `mcp` section if it was added for this integration.
+
+3. Remove the optional skill.
+
+```bash
+rm -rf ~/.opencode/skills/mempalace
+```
+
+4. Remove MemPalace-related shell environment variables from the user's shell profile.
+
+Delete entries such as:
+
+```bash
+export MEMPAL_CONVOS_DIR=~/chats
+export MEMPALACE_SAVE_INTERVAL=15
+export MEMPALACE_DEBUG=1
+export OPENCODE_DB_PATH=~/.local/share/opencode/opencode.db
+export MEMPALACE_PYTHON=/path/to/python3
+```
+
+5. Remove the plugin repository clone if desired.
+
+```bash
+rm -rf ~/git/opencode-mempalace
+```
+
+6. Remove exported OpenCode transcripts if desired.
+
+```bash
+rm -rf ~/chats/opencode
+```
+
+7. Remove the debug log if desired.
+
+```bash
+rm -f /tmp/opencode-mempalace.log
+```
+
+8. Optionally uninstall MemPalace itself.
+
+If it was installed with pip:
+
+```bash
+python3 -m pip uninstall mempalace
+```
+
+If it was installed with `--user --break-system-packages`, use the same Python environment to uninstall it.
+
+9. Restart OpenCode and the shell session.
+
+</details>
 
 ### 1. Install MemPalace
 
