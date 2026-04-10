@@ -50,19 +50,13 @@ python3 -m pip install --user --break-system-packages mempalace
 
 If installed into `~/.local/bin`, add that directory to the shell `PATH`.
 
-3. Initialize MemPalace.
-
-```bash
-mempalace init ~/projects/myapp
-```
-
-4. Clone this plugin repository.
+3. Clone this plugin repository.
 
 ```bash
 git clone https://github.com/victornor/opencode-mempalace.git ~/git/opencode-mempalace
 ```
 
-5. Install plugin dependencies and build it.
+4. Install plugin dependencies and build it.
 
 ```bash
 cd ~/git/opencode-mempalace
@@ -70,7 +64,7 @@ bun install
 bun run build
 ```
 
-6. Configure OpenCode to load the plugin.
+5. Configure OpenCode to load the plugin.
 
 Edit `~/.config/opencode/opencode.json` and ensure it contains:
 
@@ -83,7 +77,7 @@ Edit `~/.config/opencode/opencode.json` and ensure it contains:
 
 If the file already exists, merge this into the existing config instead of overwriting unrelated settings.
 
-7. Optionally configure the MemPalace MCP server in the same `opencode.json`.
+6. Optionally configure the MemPalace MCP server in the same `opencode.json`.
 
 ```json
 {
@@ -97,21 +91,20 @@ If the file already exists, merge this into the existing config instead of overw
 }
 ```
 
-8. Optionally install the OpenCode skill.
+7. Optionally install the OpenCode skill.
 
 ```bash
 mkdir -p ~/.opencode/skills/mempalace
 cp ~/git/opencode-mempalace/skills/mempalace/SKILL.md ~/.opencode/skills/mempalace/SKILL.md
 ```
 
-9. Configure environment variables in the user's shell profile.
+8. Configure environment variables in the user's shell profile.
 
 Required or recommended:
 
 ```bash
 export MEMPAL_CONVOS_DIR=~/chats
 export MEMPALACE_SAVE_INTERVAL=15
-export MEMPALACE_DEBUG=1
 export OPENCODE_DB_PATH=~/.local/share/opencode/opencode.db
 ```
 
@@ -121,29 +114,24 @@ Optional override if MemPalace is not available via the default Python:
 export MEMPALACE_PYTHON=/path/to/python3
 ```
 
-10. Create the transcript export directory.
+9. Create the transcript export directory.
 
 ```bash
 mkdir -p ~/chats/opencode
 ```
 
-11. Reload the shell configuration or start a new shell.
+10. Reload the shell configuration or start a new shell.
 
-12. Restart OpenCode.
+11. Restart OpenCode.
 
-13. Verify installation.
+12. Ask the user to confirm the setup loaded correctly.
 
-```bash
-mempalace status
-tail -50 /tmp/opencode-mempalace.log
-```
+After restart, ask the user to confirm:
 
-14. Verify the plugin path works by sending a few prompts in OpenCode, then check:
+- the `mempalace` MCP server appears in the `/mcp` menu
+- the `mempalace` skill appears in the `/skills` menu if the optional skill was installed
 
-```bash
-ls -la ~/chats/opencode
-mempalace search "some phrase from a recent conversation"
-```
+Do not run project-specific `mempalace init` during installation. The user or agent should do that later for projects they actually want to file into MemPalace.
 
 </details>
 
